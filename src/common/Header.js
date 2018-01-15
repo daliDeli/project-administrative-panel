@@ -1,25 +1,29 @@
-import React from "react";
-
+import React, { Component } from "react";
+import {Link} from "react-router-dom";
 import "./Header.css";
 
-const Search = props => {
-	const reloadPage = () => {
-		document.location.reload();
-	};
 
-	return (
-		<div className="Header_mainStyle">
-			<nav className="flex-wrapper">
-				<h1 className="Header_title" onClick={reloadPage}>
-					Biterview Administrative Panel
-				</h1>
-				<div>
-					<input type="button" value="Reports" className="btn btn-danger Header_buttons" />
-					<input type="button" value="Create Report" className="btn btn-danger Header_buttons" />
-				</div>
-			</nav>
-		</div>
-	);
+export default class Header extends Component {
+
+	render() {
+
+		return (
+			<header>
+				<nav className="navbar navbar-light bg-light justify-content-between">
+					<a className="navbar-brand">Administrative Panel</a>
+					<form className="form-inline">
+						<input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+						<Link to="/" className="btn btn-outline-success my-2 my-sm-0" role="button">
+							Reports
+					</Link>
+						<Link to="/" className="btn btn-outline-success my-2 my-sm-0" role="button">
+							Create Report
+					</Link>
+
+					</form>
+				</nav>
+			</header>
+		);
+	}
 };
 
-export default Search;
