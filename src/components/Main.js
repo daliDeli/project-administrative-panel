@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from "react-router-dom";
 import { communicationService } from "../services/communicationService";
+import CandidatesReport from "./CandidatesReport";
 import "./Main.css";
 
 export default class MainPage extends Component {
@@ -11,6 +12,16 @@ export default class MainPage extends Component {
         this.state = {
             reports: []
         }
+    }
+    
+
+
+    render(){
+        return(
+            <main>
+            
+            </main>
+        )
     }
 
     
