@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import Modal from 'react-modal';
 // import { Link } from "react-router-dom";
 import { communicationService } from "../services/communicationService";
 import CandidatesReport from "./CandidatesReport";
+import ReportInDetail from "./ReportInDetail";
 import "./Main.css";
 
 export default class MainPage extends Component {
@@ -10,13 +12,43 @@ export default class MainPage extends Component {
         super(props);
 
         this.state = {
-            candidatesReports: []
+            candidatesReports: [],
+            modalIsOpen: false
         }
+
         this.bindEventHandlers();
+
+        const style = {
+            overlay: {
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(255, 255, 255, 0.75)'
+            },
+            content: {
+                position: 'absolute',
+                top: '100px',
+                left: '100px',
+                bottom: '100px',
+                right: '100px',
+                border: '1px solid #ccc',
+                background: '#DAE2DF',
+                overflow: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                borderRadius: '4px',
+                outline: 'none',
+                padding: '20px'
+
+            }
+        };
     }
 
-    bindEventHandlers(){
+    bindEventHandlers() {
         this.getCandidatesReports = this.getCandidatesReports.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
 
     getCandidatesReports() {
@@ -30,7 +62,16 @@ export default class MainPage extends Component {
             });
     }
 
-    componentDidMount(){
+    openModal(state) {
+        console.log(state);
+        this.setState({ modalIsOpen: state });
+    }
+
+    closeModal(state) {
+        this.setState({ modalIsOpen: state });
+    }
+
+    componentDidMount() {
         this.getCandidatesReports();
     }
 
@@ -43,11 +84,32 @@ export default class MainPage extends Component {
                     ? <p>Loading</p>
                     : ''
                 }
+                <table className="table table-bordered table-inverse text-center ">
+                <thead className=" container-fluid">
+                    <tr className="row">
+                        <th className="col-12 col-md-1">#</th>
+                        <th className="col-12 col-md-3">Candidate Name</th>
+                        <th className="col-12 col-md-3">Company Name</th>
+                        <th className="col-12 col-md-2">Interview Date</th>
+                        <th className="col-12 col-md-1">Status</th>
+                        <th className="col-6 col-md-1">Details</th>
+                        <th className="col-6 col-md-1">DELETE</th>
+                    </tr>
+                </thead>
                 {this.state.candidatesReports.map((report, i) => {
-                return(
-                    <CandidatesReport renderReports={report} key={i} id={i + 1}/>
-                )
-            })}
+                    return (
+                        <CandidatesReport shouldOpenModal={this.openModal}  renderReports={report} key={i} id={i + 1} />
+                    )
+                })}
+                </table>
+
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}
+                    style={this.style}
+                >
+                <ReportInDetail shouldCloseModal={this.closeModal} candidatesInfo={this.state.report}/>
+                </Modal>
             </main>
         )
     }
