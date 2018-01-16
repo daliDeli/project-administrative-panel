@@ -7,7 +7,7 @@ import {BASE_URL} from "../constants";
         axios.get(`${BASE_URL}reports`)
         .then(response => {
          
-          successfulResponse(response);
+          successfulResponse(response.data);
         })
         .catch(error => {
           failedResponse(error);

@@ -10,19 +10,47 @@ export default class MainPage extends Component {
         super(props);
 
         this.state = {
-            reports: []
+            candidatesReports: []
         }
+        this.bindEventHandlers();
     }
-    
+
+    bindEventHandlers(){
+        this.getCandidatesReports = this.getCandidatesReports.bind(this);
+    }
+
+    getCandidatesReports() {
+        communicationService.fetchCandidatesReports((candidatesReports) => {
+            this.setState({
+                candidatesReports
+            })
+        },
+            (error) => {
+                console.log(error);
+            });
+    }
+
+    componentDidMount(){
+        this.getCandidatesReports();
+    }
 
 
-    render(){
-        return(
+    render() {
+
+        return (
             <main>
-            
+                {this.state.candidatesReports.length === 0
+                    ? <p>Loading</p>
+                    : ''
+                }
+                {this.state.candidatesReports.map((report, i) => {
+                return(
+                    <CandidatesReport renderReports={report} key={i} id={i + 1}/>
+                )
+            })}
             </main>
         )
     }
 
-    
+
 }
