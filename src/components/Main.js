@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 // import { Link } from "react-router-dom";
 import { communicationService } from "../services/communicationService";
+import { redirectionService } from "../services/redirectionService";
 import CandidatesReport from "./CandidatesReport";
 import ReportInDetail from "./ReportInDetail";
 import "./Main.css";
@@ -64,6 +65,14 @@ export default class MainPage extends Component {
             });
     }
 
+    deleteChosenReport(reportId){
+        communicationService.deleteCandidatesReports(reportId, (response)=>{
+            console.log(response)
+        },(error)=>{
+            console.log(error);
+        })
+    }
+
     openModal(state) {
         console.log(state);
         this.setState({ modalIsOpen: state });
@@ -107,7 +116,7 @@ export default class MainPage extends Component {
                     </thead>
                     {this.state.candidatesReports.map((report, i) => {
                         return (
-                            <CandidatesReport shouldOpenModal={this.openModal} sendReportToModal={this.sendReportToModal} renderReports={report} key={i} id={i + 1} />
+                            <CandidatesReport deleteChosenReport={this.deleteChosenReport} sendReportToModal={this.sendReportToModal} renderReports={report} shouldOpenModal={this.openModal}  key={i} id={i + 1} />
                         )
                     })}
                 </table>
