@@ -68,11 +68,12 @@ export default class MainPage extends Component {
     deleteChosenReport(reportId){
         communicationService.deleteCandidatesReports(reportId, (response)=>{
             console.log(response)
+            redirectionService.reloadThePage();
         },(error)=>{
             console.log(error);
         })
     }
-
+    
     openModal(state) {
         console.log(state);
         this.setState({ modalIsOpen: state });
