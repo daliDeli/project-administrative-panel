@@ -7,7 +7,11 @@ export default class CandidatesReport extends Component {
     }
 
     setAndSendModalState() {
-        this.props.shouldOpenModal(true);   
+        this.props.shouldOpenModal(true);
+        console.log(this.props.renderReports);
+
+        let modalReport = this.props.renderReports;
+        this.props.sendReportToModal(modalReport)
     }
     
     render() {
