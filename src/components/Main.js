@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 // import { Link } from "react-router-dom";
 import { communicationService } from "../services/communicationService";
+import { redirectionService } from "../services/redirectionService";
 import CandidatesReport from "./CandidatesReport";
 import ReportInDetail from "./ReportInDetail";
 import "./Main.css";
@@ -13,7 +14,8 @@ export default class MainPage extends Component {
 
         this.state = {
             candidatesReports: [],
-            modalIsOpen: false
+            modalIsOpen: false,
+            modalReport: {}
         }
 
         this.bindEventHandlers();
@@ -49,6 +51,7 @@ export default class MainPage extends Component {
         this.getCandidatesReports = this.getCandidatesReports.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.sendReportToModal = this.sendReportToModal.bind(this);
     }
 
     getCandidatesReports() {
@@ -62,6 +65,14 @@ export default class MainPage extends Component {
             });
     }
 
+    deleteChosenReport(reportId){
+        communicationService.deleteCandidatesReports(reportId, (response)=>{
+            console.log(response)
+        },(error)=>{
+            console.log(error);
+        })
+    }
+
     openModal(state) {
         console.log(state);
         this.setState({ modalIsOpen: state });
@@ -69,6 +80,13 @@ export default class MainPage extends Component {
 
     closeModal(state) {
         this.setState({ modalIsOpen: state });
+    }
+
+    sendReportToModal(modalReport) {
+        console.log("radi",modalReport);
+        this.setState({
+            modalReport
+        });
     }
 
     componentDidMount() {
@@ -85,30 +103,31 @@ export default class MainPage extends Component {
                     : ''
                 }
                 <table className="table table-bordered table-inverse text-center ">
-                <thead className=" container-fluid">
-                    <tr className="row">
-                        <th className="col-12 col-md-1">#</th>
-                        <th className="col-12 col-md-3">Candidate Name</th>
-                        <th className="col-12 col-md-3">Company Name</th>
-                        <th className="col-12 col-md-2">Interview Date</th>
-                        <th className="col-12 col-md-1">Status</th>
-                        <th className="col-6 col-md-1">Details</th>
-                        <th className="col-6 col-md-1">DELETE</th>
-                    </tr>
-                </thead>
-                {this.state.candidatesReports.map((report, i) => {
-                    return (
-                        <CandidatesReport shouldOpenModal={this.openModal}  renderReports={report} key={i} id={i + 1} />
-                    )
-                })}
+                    <thead className=" container-fluid">
+                        <tr className="row">
+                            <th className="col-12 col-md-1">#</th>
+                            <th className="col-12 col-md-3">Candidate Name</th>
+                            <th className="col-12 col-md-3">Company Name</th>
+                            <th className="col-12 col-md-2">Interview Date</th>
+                            <th className="col-12 col-md-1">Status</th>
+                            <th className="col-6 col-md-1">Details</th>
+                            <th className="col-6 col-md-1">DELETE</th>
+                        </tr>
+                    </thead>
+                    {this.state.candidatesReports.map((report, i) => {
+                        return (
+                            <CandidatesReport deleteChosenReport={this.deleteChosenReport} sendReportToModal={this.sendReportToModal} renderReports={report} shouldOpenModal={this.openModal}  key={i} id={i + 1} />
+                        )
+                    })}
                 </table>
 
                 <Modal
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}
                     style={this.style}
+                    ariaHideApp={false}
                 >
-                <ReportInDetail shouldCloseModal={this.closeModal} candidatesInfo={this.state.report}/>
+                    <ReportInDetail shouldCloseModal={this.closeModal} candidateReport={this.state.modalReport} />
                 </Modal>
             </main>
         )

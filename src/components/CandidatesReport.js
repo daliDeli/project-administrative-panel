@@ -3,11 +3,23 @@ import React, { Component } from 'react';
 export default class CandidatesReport extends Component {
     constructor(props) {
         super(props);
+    
     this.setAndSendModalState = this.setAndSendModalState.bind(this);
+    this.deleteReport = this.deleteReport.bind(this);
     }
 
     setAndSendModalState() {
-        this.props.shouldOpenModal(true);   
+        this.props.shouldOpenModal(true);
+        console.log( "modal report" , this.props.renderReports);
+
+        let modalReport = this.props.renderReports;
+        this.props.sendReportToModal(modalReport)
+    }
+
+    deleteReport(){
+        let modalReport = this.props.renderReports;
+        this.props.deleteChosenReport(modalReport.id)
+        console.log(modalReport.id);
     }
     
     render() {
@@ -24,7 +36,7 @@ export default class CandidatesReport extends Component {
                         <td className="col-12 col-md-2">{interviewDate}</td>
                         <td className="col-12 col-md-1">{status}</td>
                         <td className="col-6 col-md-1"><button type="button" onClick={this.setAndSendModalState} className="btn btn-link"><i className='fa fa-eye' aria-hidden='true'></i></button></td>
-                        <td className="col-6 col-md-1"><button type="button" className="btn btn-link"><i className="fa fa-trash" aria-hidden="true"></i></button></td>
+                        <td className="col-6 col-md-1"><button type="button" onClick={this.deleteReport} className="btn btn-link"><i className="fa fa-trash" aria-hidden="true"></i></button></td>
                     </tr>
                 </tbody>
             
